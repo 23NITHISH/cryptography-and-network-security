@@ -1,0 +1,46 @@
+#include <stdio.h>
+#include <string.h>
+
+void encrypt(char *plaintext, int key) {
+    int i, j, k;
+    int plaintextLen = strlen(plaintext);
+    char ciphertext[plaintextLen];
+
+    for (i = 0, k = 0; i < key; i++) {
+        for (j = i; j < plaintextLen; j += key) {
+            ciphertext[k++] = plaintext[j];
+        }
+    }
+    ciphertext[k] = '\0';
+    strcpy(plaintext, ciphertext);
+}
+
+void decrypt(char *ciphertext, int key) {
+    int i, j, k;
+    int ciphertextLen = strlen(ciphertext);
+    int rows = key, cols = (ciphertextLen + key - 1) / key;
+    char plaintext[ciphertextLen];
+
+    for (i = 0, k = 0; k < ciphertextLen; i++) {
+        for (j = i; j < ciphertextLen; j += rows) {
+            plaintext[j] = (k < ciphertextLen) ? ciphertext[k++] : '\0';
+        }
+    }
+    strcpy(ciphertext, plaintext);
+}
+
+int main() {
+    char plaintext[100];
+    int key;
+    printf("Enter plaintext: ");
+    scanf("%s", plaintext);
+    printf("Enter key: ");
+    scanf("%d", &key);
+
+    encrypt(plaintext, key);
+    printf("Encrypted Text: %s\n", plaintext);
+    decrypt(plaintext, key);
+    printf("Decrypted Text: %s\n", plaintext);
+    return 0;
+}
+
