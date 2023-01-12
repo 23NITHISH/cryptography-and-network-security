@@ -1,0 +1,57 @@
+#include <stdio.h>
+#include <string.h>
+#include <ctype.h>
+
+void encrypt(char *plaintext, char *key) {
+    int i, j;
+    int plaintextLen = strlen(plaintext);
+    int keyLen = strlen(key);
+
+    for (i = 0, j = 0; i < plaintextLen; i++, j++) {
+        if (j == keyLen) {
+            j = 0;
+        }
+
+        if (isalpha(plaintext[i])) {
+            if (isupper(plaintext[i])) {
+                plaintext[i] = 'A' + (plaintext[i] - 'A' + key[j] - 'A') % 26;
+            } else {
+                plaintext[i] = 'a' + (plaintext[i] - 'a' + key[j] - 'a') % 26;
+            }
+        }
+    }
+}
+
+void decrypt(char *ciphertext, char *key) {
+    int i, j;
+    int ciphertextLen = strlen(ciphertext);
+    int keyLen = strlen(key);
+
+    for (i = 0, j = 0; i < ciphertextLen; i++, j++) {
+        if (j == keyLen) {
+            j = 0;
+        }
+
+        if (isalpha(ciphertext[i])) {
+            if (isupper(ciphertext[i])) {
+                ciphertext[i] = 'A' + (ciphertext[i] - 'A' - (key[j] - 'A') + 26) % 26;
+            } else {
+                ciphertext[i] = 'a' + (ciphertext[i] - 'a' - (key[j] - 'a') + 26) % 26;
+            }
+        }
+    }
+}
+
+int main() {
+    char plaintext[100], key[100];
+    printf("Enter plaintext: ");
+    scanf("%s", plaintext);
+    printf("Enter key: ");
+    scanf("%s", key);
+
+    encrypt(plaintext, key);
+    printf("Encrypted Text: %s\n", plaintext);
+    decrypt(plaintext, key);
+    printf("Decrypted Text: %s\n", plaintext);
+    return 0;
+}
